@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: mysql-mcp-demo
+
+# 默认配置
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
