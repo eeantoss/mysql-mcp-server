@@ -2,6 +2,39 @@
 
 一个基于 Model Context Protocol (MCP) 的 MySQL 数据库操作服务器，支持跨平台使用，可以通过 MCP 协议执行 SQL 语句、脚本和数据库管理操作。
 
+## TL;DR（精简版）
+
+- **项目诉求（一句话）**：面向多项目多环境的智能 MySQL 管理，通过 MCP 无需本地 mysql 客户端即可执行 SQL/脚本与环境切换。
+
+- **安装（两选一）**
+  - 本机开发：`npm run build && npm link`
+  - 全局安装（Git）：`npm i -g git+https://github.com/eeantoss/mysql-mcp-server.git`
+
+- **Windsurf/Claude MCP 最小配置**
+  ```json
+  { "mcpServers": { "mysql": { "command": "mysql-mcp-server.cmd", "env": { "DEBUG": "false" } } } }
+  ```
+
+- **三大典型场景（即贴即用）**
+  - 本地未安装 MySQL 客户端（仍可执行 SQL）
+    ```json
+    { "tool": "mysql_connect", "arguments": {"host":"localhost","port":3306,"user":"root","password":"pwd","database":"test"} }
+    ```
+    ```sql
+    SELECT 1 AS ok;  -- 校验
+    SHOW TABLES;     -- 列出表
+    ```
+  - 数据库在 Docker 容器中
+    ```json
+    { "tool": "mysql_connect", "arguments": {"connectionType":"docker","containerName":"mysql_container","user":"root","password":"pwd","database":"test"} }
+    ```
+  - 数据库在远程 IP（如 1.1.1.2:3306）
+    ```json
+    { "tool": "mysql_connect", "arguments": {"host":"1.1.1.2","port":3306,"user":"root","password":"pwd","database":"prod"} }
+    ```
+
+> 更多功能/演示：见下方“文档导航”。
+
 ## 📚 文档导航
 
 - 🚀 **[快速入门](./QUICKSTART.md)** - 5分钟快速配置指南
@@ -44,6 +77,21 @@ npm install
 ```powershell
 nvm use 18.20.8
 node -v   # 期望输出 v18.x
+```
+
+#### 全局安装（两种方式，选其一）
+
+- 开发者本地（推荐）：
+
+```bash
+npm run build
+npm link   # 将本项目注册为全局命令 mysql-mcp-server
+```
+
+- 从 GitHub 全局安装：
+
+```bash
+npm i -g git+https://github.com/eeantoss/mysql-mcp-server.git
 ```
 
 ### 2. 环境配置
@@ -110,7 +158,7 @@ npm run dev
 }
 ```
 
-注意：部分 IDE 不允许设置 `cwd` 字段，请仅指定 `command` 与 `args`。
+注意：使用全局 CLI 后，无需写死绝对路径；部分 IDE 不允许设置 `cwd` 字段，请仅指定 `command` 即可。
 
 ## MCP 工具列表
 

@@ -1,11 +1,12 @@
 {
   "name": "mysql-mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Model Context Protocol server for MySQL database operations",
   "main": "build/index.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "prepare": "tsc",
     "start": "node build/index.js",
     "dev": "tsc && node build/index.js",
     "watch": "tsc --watch",
@@ -20,6 +21,15 @@
   ],
   "author": "Your Name",
   "license": "MIT",
+  "bin": {
+    "mysql-mcp-server": "bin/mysql-mcp-server.js"
+  },
+  "files": [
+    "build/**",
+    "bin/**",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "mysql2": "^3.6.5",

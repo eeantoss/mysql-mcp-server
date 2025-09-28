@@ -869,14 +869,19 @@ class MySQLMCPServer {
   }
 }
 
+// 对外导出用于 CLI 的启动函数
+export async function start(): Promise<void> {
+  const server = new MySQLMCPServer();
+  await server.run();
+}
+
 // 启动服务器（兼容 Windows 的 ESM 直接执行判断）
 try {
   const argv1 = process.argv[1];
   const argv1Url = argv1 ? pathToFileURL(argv1).href : '';
   console.error('[MCP] Entry check:', { argv1, argv1Url, importMetaUrl: import.meta.url });
   if (argv1 && argv1Url === import.meta.url) {
-    const server = new MySQLMCPServer();
-    server.run().catch((error) => {
+    start().catch((error) => {
       console.error('服务器启动失败:', error);
       process.exit(1);
     });
@@ -886,8 +891,7 @@ try {
   }
 } catch (e) {
   console.error('[MCP] Entry check failed, starting server as fallback.', e);
-  const server = new MySQLMCPServer();
-  server.run().catch((error) => {
+  start().catch((error) => {
     console.error('服务器启动失败:', error);
     process.exit(1);
   });
